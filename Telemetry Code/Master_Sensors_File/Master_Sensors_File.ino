@@ -111,13 +111,13 @@ void setup() {
     devStatus = mpu.dmpInitialize();
 
     // supply your own gyro offsets here, scaled for min sensitivity
-    mpu.setXGyroOffset(24);
-    mpu.setYGyroOffset(25);
-    mpu.setZGyroOffset(85);
+    mpu.setXGyroOffset(41);
+    mpu.setYGyroOffset(42);
+    mpu.setZGyroOffset(96);
     
-    mpu.setXAccelOffset(-2999);
-    mpu.setYAccelOffset(-4445);
-    mpu.setZAccelOffset(1199);
+    mpu.setXAccelOffset(-3067);
+    mpu.setYAccelOffset(-4550);
+    mpu.setZAccelOffset(6809); 
     // make sure it worked (returns 0 if so)
     if (devStatus == 0) {
         // turn on the DMP, now that it's ready
