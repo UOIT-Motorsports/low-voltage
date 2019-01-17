@@ -1,0 +1,74 @@
+// ***************************************CAN***************************************
+// ATCOMMANDS.ino (for CAN converter) (Ken) ***************************************
+//Serial Relay - Arduino will patch a 
+//serial link between the computer and the GPRS Shield
+//at 19200 bps 8-N-1
+//Computer is connected to Hardware UART
+//GPRS Shield is connected to the Software UART 
+
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(2,3);
+
+void setup()
+{
+  mySerial.begin(9600);                 
+  Serial.begin(9600);                  
+}
+
+void loop()
+{
+  if (mySerial.available())
+    Serial.write(mySerial.read());
+  if (Serial.available())
+    mySerial.write(Serial.read());  
+
+}
+
+// *************************************** Evan include your fully updated read/write CAN
+
+
+
+
+
+
+***************************************UART BMS COMMUNICATION***************************************
+//REQUEST AND READ TEMP FROM BMS (KEN) ***************************************
+
+#include <SoftwareSerial.h>
+
+void setup() {
+  Serial.begin(9600);      // debugging
+   Serial1.begin(115200);
+}
+
+void loop() {
+//   char character;
+   String content = "";
+   byte message[] = {0xAA,0x1B,0x3F,0x1B}; // address, function code, CRC, CRC
+   Serial1.write(message, sizeof(message));
+  while (Serial1.available()) {   
+//    character = Serial1.read();
+//    content=Character.toString(character);  
+//      content.concat(character);
+      byte bite[6] = {0,0,0,0,0,0};
+      int i=0;
+      while(i<6){
+      bite[i]=Serial1.read();
+      i++;                    
+  }
+  i=0;
+  }   
+      int j=0;                           
+      while(j<6){
+//      Serial.println((String)bite[j]);
+      j++;   
+      }
+  j=0;
+//  if (content != "") {           // debugging
+//    Serial.println(bite);     // debugging
+  }                             // debugging
+  delay(100);
+
+}
+
