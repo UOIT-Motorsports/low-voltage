@@ -17,7 +17,7 @@ Distributed as-is; no warranty is given.
 //********************************Setup Loop*********************************//
 int MessageLength;
 void setup() {
-  Serial.begin(9600); // For debug use
+  Serial.begin(115200); // For debug use
   Serial.println("CAN Read - Testing receival of CAN Bus message");  
   
   
@@ -33,87 +33,82 @@ void setup() {
 
 void loop(){
  
- 
-recievecheck(); 
-
-
-
-
+send1();
+send2();
+//recieve66(); 
+delay(1000);
 }
 
-void recievecheck()
-{
+void recieve66(){
   tCAN message;
 if (mcp2515_check_message()) 
   {
     if (mcp2515_get_message(&message)) 
   {
-        if(message.id == 0xFF)  //uncomment when you want to filter
-             {
+        //if(message.id == 0x620 and message.data[2] == 0xFF)  //uncomment when you want to filter
+             //{
                
-               Serial.print("Master Id: ");
-               Serial.print(message.id,HEX);
-                Serial.println(message.data[0],HEX);
-              // check for my id:
-              if(message.data[0] == 0x56) { // yay me
-                Serial.print("got my id, new array length for send: ");
-                Serial.println(message.data[1]);
-                MessageLength = message.data[1];
-                send56();
-              }
-             }
-           }}
-}
-
-
-
-
-void send56()
-{
-  tCAN message;
- message.id = 0x56; //formatted in HEX
-        message.header.rtr = 0;
-        message.header.length = MessageLength; //formatted in DEC
-  message.data[0] = 1;
-  message.data[1] = 2;
-  message.data[2] = 3;
-  message.data[3] = 4; //formatted in HEX
-  message.data[4] = 5;
-  message.data[5] = 6;
-  message.data[6] = 7;
-  message.data[7] = 8;
-
-mcp2515_bit_modify(CANCTRL, (1<<REQOP2)|(1<<REQOP1)|(1<<REQOP0), 0);
-mcp2515_send_message(&message);
-
-Serial.println("Message Sent");
-}
-/*
- 
- void recv2()
-{
- tCAN message;
-if (mcp2515_check_message()) 
-  {
-    if (mcp2515_get_message(&message)) 
-  {
-        
-          if(message.id == 0x57 )   
-               {
                Serial.print("ID: ");
                Serial.print(message.id,HEX);
                Serial.print(", ");
                Serial.print("Data: ");
-               Serial.print(message.header.length,DEC);
-               Serial.print(" ");
+             //  Serial.print(message.header.length,DEC);
                for(int i=0;i<message.header.length;i++) 
                 { 
                   Serial.print(message.data[i],HEX);
                   Serial.print(" ");
                 }
                Serial.println("");
-            
-               }
+             //}
            }}
+
 }
-*/
+
+
+
+
+void send1()
+{
+  tCAN message;
+ message.id = 0x44;//formatted in HEX
+        message.header.rtr = 0;
+        message.header.length = MessageLength; //formatted in DEC
+  message.data[0] = 0x08;
+  message.data[1] = 0x01;
+  message.data[2] = 0x1B;
+  message.data[3] = 0x05; //formatted in HEX
+  message.data[4] = 0X55;
+  message.data[5] = 0X48;
+  message.data[6] = 0X69;
+  message.data[7] = 0X11;
+  
+
+mcp2515_bit_modify(CANCTRL, (1<<REQOP2)|(1<<REQOP1)|(1<<REQOP0), 0);
+mcp2515_send_message(&message);
+
+Serial.println("Message1 Sent");
+}
+
+
+
+void send2()
+{
+  tCAN message;
+ message.id = 0x33;//formatted in HEX
+        message.header.rtr = 0;
+        message.header.length = MessageLength; //formatted in DEC
+  message.data[0] = 0x01;
+  message.data[1] = 0x01;
+  message.data[2] = 0x1A;
+  message.data[3] = 0x55; //formatted in HEX
+  message.data[4] = 0X55;
+  message.data[5] = 0X00;
+  message.data[6] = 0X00;
+  message.data[7] = 0X11;
+  
+
+mcp2515_bit_modify(CANCTRL, (1<<REQOP2)|(1<<REQOP1)|(1<<REQOP0), 0);
+mcp2515_send_message(&message);
+
+Serial.println("Message2 Sent");
+}
