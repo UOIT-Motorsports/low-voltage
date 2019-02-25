@@ -7,7 +7,7 @@ Used with permission 2016. License CC By SA.
 
 Distributed as-is; no warranty is given.
 *************************************************************************/
-
+#include <Serial_CAN_Module.h>
 #include <Canbus.h>
 #include <defaults.h>
 #include <global.h>
@@ -17,7 +17,7 @@ Distributed as-is; no warranty is given.
 //********************************Setup Loop*********************************//
 int MessageLength;
 void setup() {
-  Serial.begin(115200); // For debug use
+  Serial.begin(9600); // For debug use
   Serial.println("CAN Read - Testing receival of CAN Bus message");  
   
   
@@ -33,20 +33,27 @@ void setup() {
 
 void loop(){
  
-send1();
-send2();
-//recieve66(); 
+//send1();
+
+recieve55(); 
 delay(1000);
+
+
+//send2();
+
+//recieve70(); 
+
 }
 
-void recieve66(){
+void recieve55(){
   tCAN message;
 if (mcp2515_check_message()) 
   {
     if (mcp2515_get_message(&message)) 
   {
-        //if(message.id == 0x620 and message.data[2] == 0xFF)  //uncomment when you want to filter
-             //{
+ 
+        if(message.id == 0x55)  //uncomment when you want to filter
+             {
                
                Serial.print("ID: ");
                Serial.print(message.id,HEX);
@@ -59,12 +66,52 @@ if (mcp2515_check_message())
                   Serial.print(" ");
                 }
                Serial.println("");
-             //}
+             }
+           if(message.id == 0x70)  //uncomment when you want to filter
+             {
+               
+               Serial.print("ID: ");
+               Serial.print(message.id,HEX);
+               Serial.print(", ");
+               Serial.print("Data: ");
+             //  Serial.print(message.header.length,DEC);
+               for(int i=0;i<message.header.length;i++) 
+                { 
+                  Serial.print(message.data[i],HEX);
+                  Serial.print(" ");
+                }
+               Serial.println("");
+             }
+           
+}}
+}
+
+void recieve70(){
+  tCAN message;
+if (mcp2515_check_message()) 
+  {
+    if (mcp2515_get_message(&message)) 
+  {
+  
+        if(message.id == 0x70)  //uncomment when you want to filter
+             {
+               
+               Serial.print("ID: ");
+               Serial.print(message.id,HEX);
+               Serial.print(", ");
+               Serial.print("Data: ");
+             //  Serial.print(message.header.length,DEC);
+               for(int i=0;i<message.header.length;i++) 
+                { 
+                  Serial.print(message.data[i],HEX);
+                  Serial.print(" ");
+                }
+               Serial.println("");
+             }
+            
            }}
 
 }
-
-
 
 
 void send1()
